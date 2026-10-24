@@ -5,11 +5,13 @@ TagManager:
   serializedVersion: 3
   tags:
   - PeaReload
+  - Mouse
+  - Cheese
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - IgnorePea
   - Water
   - UI
   - 
