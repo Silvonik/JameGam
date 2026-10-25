@@ -1,5 +1,8 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -7,34 +10,76 @@ public class GameManager : MonoBehaviour
    [SerializeField] GameObject mousePrefab;
    [SerializeField] Transform cheesePos;
 
-   [SerializeField] float peaDelay = 8f;
+   [SerializeField] float peaDelay = 10f;
    [SerializeField] GameObject peaPrefab;
 
     [HideInInspector]
    public bool gameEnded = false;
-    
+
+
+   [SerializeField] TextMeshProUGUI countdownText;
+   [SerializeField] float timeLeft;    
+
+   [SerializeField] Animator textMessage;
+
+   private bool gameStarted = false;
+
+   [SerializeField] GameObject LoseUI;
+   [SerializeField] GameObject WinUI;
+
     void Start()
     {
+        gameStarted = false;
         gameEnded = false;
-        StartCoroutine(SpawnPea());
-        StartCoroutine(SpawnMouse());
+        StartCoroutine(messageAnim());
+
     }
 
     void Update()
     {   
+        startTimer();
+        if (timeLeft <= 60)
+        {
+            mouseDelay = 2.5f;
+        }
+    }
 
+    IEnumerator messageAnim()
+    {
+        textMessage.Play("Message", 0, 0f);
+        yield return new WaitForSeconds(5f);
+        textMessage.Play("MesssageOut", 0, 0f);
+        gameStarted = true;
+        StartCoroutine(SpawnPea());
+        StartCoroutine(SpawnMouse());
+    }
+    void startTimer()
+    {   
+        if (timeLeft > 0 && gameStarted == true)
+        {
+            timeLeft -= Time.deltaTime;
+        }
+        else if (timeLeft <= 0)
+        {
+            timeLeft = 0;
+            winGame();
+        }
+        
+        int minutes = Mathf.FloorToInt(timeLeft / 60);
+        int seconds = Mathf.FloorToInt(timeLeft % 60);
+        countdownText.text = "Time Left: " + string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
     public void loseGame()
     {
-        Debug.Log("Lose Game");
         gameEnded = true;
+        LoseUI.SetActive(true);
     }
 
     void winGame()
     {
-        Debug.Log("Win Game");
         gameEnded = true;
+        WinUI.SetActive(true);
     }
     IEnumerator SpawnMouse()
     {   
@@ -50,6 +95,7 @@ public class GameManager : MonoBehaviour
                 GameObject mouseSpawned = Instantiate(mousePrefab, mousePos, Quaternion.identity);
                 Mouse mouseScript = mouseSpawned.GetComponent<Mouse>();
                 mouseScript.cheesePos = cheesePos;
+                mouseScript.gameManager = this;
                 mouseScript.mouseSpeed = Random.Range(2f, 6f);
             }
             else if (MSquare == 1)
@@ -59,6 +105,7 @@ public class GameManager : MonoBehaviour
                 GameObject mouseSpawned = Instantiate(mousePrefab, mousePos, Quaternion.identity);
                 Mouse mouseScript = mouseSpawned.GetComponent<Mouse>();
                 mouseScript.cheesePos = cheesePos;
+                mouseScript.gameManager = this;
                 mouseScript.mouseSpeed = Random.Range(2f, 6f);
             }
             else if (MSquare == 2)
@@ -68,6 +115,7 @@ public class GameManager : MonoBehaviour
                 GameObject mouseSpawned = Instantiate(mousePrefab, mousePos, Quaternion.identity);
                 Mouse mouseScript = mouseSpawned.GetComponent<Mouse>();
                 mouseScript.cheesePos = cheesePos;
+                mouseScript.gameManager = this;
                 mouseScript.mouseSpeed = Random.Range(2f, 6f);
             }
             else if (MSquare == 3)
@@ -77,6 +125,7 @@ public class GameManager : MonoBehaviour
                 GameObject mouseSpawned = Instantiate(mousePrefab, mousePos, Quaternion.identity);
                 Mouse mouseScript = mouseSpawned.GetComponent<Mouse>();
                 mouseScript.cheesePos = cheesePos;
+                mouseScript.gameManager = this;
                 mouseScript.mouseSpeed = Random.Range(2f, 6f);
             }
 
@@ -119,5 +168,16 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(peaDelay);
         }
 
+    }
+
+    public void Quit()
+    {
+        Debug.Log("Quit");
+        Application.Quit();
+    }
+
+    public void Reset()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

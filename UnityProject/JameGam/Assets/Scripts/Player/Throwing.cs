@@ -62,7 +62,7 @@ public class Throwing : MonoBehaviour
         if (collision.CompareTag("PeaReload"))
         {
             Destroy(collision.gameObject);
-            ammo += 4;
+            ammo += 3;
         }
     }
 }

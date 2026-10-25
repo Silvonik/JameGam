@@ -8,7 +8,7 @@ public class Pea : MonoBehaviour
 
     void Start()
     {
-        Destroy(gameObject, 25f);
+        Destroy(gameObject, 15f);
 
         if (throwingScript != null)
         {

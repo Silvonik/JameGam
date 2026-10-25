@@ -4,10 +4,11 @@ public class Mouse : MonoBehaviour
 {
    public float mouseSpeed = 3f;
    public Transform cheesePos;
+   public GameManager gameManager;
 
     void Update()
     {   
-        if (cheesePos == null)
+        if (cheesePos == null || gameManager.gameEnded == true)
         {
             return;
         }
