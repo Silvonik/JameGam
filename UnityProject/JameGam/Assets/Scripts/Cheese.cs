@@ -8,6 +8,8 @@ public class Cheese : MonoBehaviour
 
    [SerializeField] TMP_Text healthText;
 
+   public GameManager gameManager;
+
     void Start()
     {
         cheeseHealth = 100f;
@@ -32,8 +34,9 @@ public class Cheese : MonoBehaviour
             healthText.color = new Color(0.635f, 0.408f, 0.404f);
         }
 
-        if (cheeseHealth <= 0)
-        {
+        if (cheeseHealth <= 0 && gameManager.gameEnded == false)
+        {   
+            gameManager.loseGame();
             Destroy(gameObject);
         }
     }

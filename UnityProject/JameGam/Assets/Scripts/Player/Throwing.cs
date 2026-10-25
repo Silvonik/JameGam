@@ -1,3 +1,5 @@
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Throwing : MonoBehaviour
@@ -10,6 +12,7 @@ public class Throwing : MonoBehaviour
     [SerializeField] int ammo = 5;
     private bool hasAmmo = true;
     [SerializeField] GameObject ammoHold;
+    [SerializeField] TMP_Text ammoUI;
 
 
     [SerializeField] Camera cam;
@@ -17,6 +20,7 @@ public class Throwing : MonoBehaviour
     [HideInInspector] 
     public Vector2 throwDirection;
 
+    public GameManager gameManager;
 
     void Update()
     {   
@@ -32,10 +36,12 @@ public class Throwing : MonoBehaviour
             ammoHold.SetActive(false);
         }
 
-        if (Input.GetMouseButtonDown(0) && hasAmmo)
+        if (Input.GetMouseButtonDown(0) && hasAmmo && gameManager.gameEnded == false)
         {
             Throw();
         }
+
+        ammoUI.text = "Peas: " + ammo.ToSafeString();
     }
 
     void Throw()
@@ -56,8 +62,7 @@ public class Throwing : MonoBehaviour
         if (collision.CompareTag("PeaReload"))
         {
             Destroy(collision.gameObject);
-            ammo += 10;
-            Debug.Log("pea");
+            ammo += 4;
         }
     }
 }

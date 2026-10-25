@@ -1,10 +1,8 @@
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Mouse : MonoBehaviour
 {
-   [SerializeField] float speed = 3f;
+   public float mouseSpeed = 3f;
    public Transform cheesePos;
 
     void Update()
@@ -14,7 +12,7 @@ public class Mouse : MonoBehaviour
             return;
         }
         
-        transform.position = Vector2.MoveTowards(transform.position, cheesePos.position, speed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, cheesePos.position, mouseSpeed * Time.deltaTime);
         
         lookCheese();
 
